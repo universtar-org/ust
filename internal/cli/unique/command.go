@@ -1,66 +1,75 @@
-package main
+package unique
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log/slog"
-	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 
+	"github.com/spf13/cobra"
 	"github.com/universtar-org/tools/internal/api"
-	"github.com/universtar-org/tools/internal/log"
 	"github.com/universtar-org/tools/internal/model"
 	"github.com/universtar-org/tools/internal/utils"
 )
 
-func main() {
-	opts := utils.ParseFlags()
-	log.InitLogger(opts.Debug)
-
-	args := flag.Args()
-	if len(args) != 1 {
-		slog.Error(
-			"invalid arguments",
-			"usage", "unique ${username}",
-		)
-		os.Exit(2)
+func NewCommand(getApp utils.AppGeter) *cobra.Command {
+	var unique = &cobra.Command{
+		Use:   "unique [username]",
+		Short: "Check uniqueness of a user",
+		RunE:  getRunE(getApp),
 	}
 
-	client, ctx := utils.InitClientAndContext(opts.Token)
-	username := args[0]
+	return unique
+}
 
-	user, err := checkUsername(client, ctx, username)
-	if err != nil {
-		slog.Error(
-			"check username failed",
-			"err", err,
-		)
-	}
+func getRunE(getApp utils.AppGeter) func(cmd *cobra.Command, args []string) error {
+	return func(cmd *cobra.Command, args []string) error {
+		repoOwner := "universtar-org"
+		app := getApp()
+		client, ctx := app.Client, app.Ctx
+		if len(args) != 1 {
+			return fmt.Errorf("username required")
+		}
 
-	const repoOwner = "universtar-org"
-	repos, err := client.GetRepoByUser(ctx, repoOwner)
-	if err != nil {
-		slog.Error(
-			"get repo by user failed",
+		username := args[0]
+		slog.Info(
+			"check uniquess",
 			"user", username,
-			"err", err,
 		)
-		os.Exit(1)
-	}
 
-	if err := checkUniqueness(client, ctx, repos, *user, repoOwner); err != nil {
-		slog.Error(
-			"check uniqueness",
-			"user", username,
-			"err", err,
-		)
-		os.Exit(1)
-	}
+		user, err := checkUsername(client, ctx, username)
+		if err != nil {
+			slog.Error(
+				"check username failed",
+				"err", err,
+			)
+			return fmt.Errorf("check user %s failed: %w", username, err)
+		}
 
-	slog.Info("finished")
+		repos, err := client.GetRepoByUser(ctx, repoOwner)
+		if err != nil {
+			slog.Error(
+				"get repo by user failed",
+				"user", username,
+				"err", err,
+			)
+			return fmt.Errorf("get repo of %s failed: %w", username, err)
+		}
+
+		if err := checkUniqueness(client, ctx, repos, *user, repoOwner); err != nil {
+			slog.Error(
+				"check uniqueness",
+				"user", username,
+				"err", err,
+			)
+			return fmt.Errorf("check uniqueness of %s failed: %w", username, err)
+		}
+		slog.Info("finished")
+
+		return nil
+	}
 }
 
 func checkUsername(client *api.Client, ctx context.Context, username string) (*model.User, error) {
