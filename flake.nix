@@ -13,6 +13,7 @@
     devShells.${system}.default = pkgs.mkShell {
       # Add packages here.
       buildInputs = with pkgs; [
+        cobra-cli
         go
         gopls
         gotools
