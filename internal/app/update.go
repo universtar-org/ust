@@ -1,35 +1,37 @@
-package main
+package app
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
 
+	"github.com/spf13/cobra"
 	"github.com/universtar-org/tools/internal/api"
 	"github.com/universtar-org/tools/internal/io"
-	"github.com/universtar-org/tools/internal/log"
 	"github.com/universtar-org/tools/internal/utils"
 )
 
-func main() {
-	opts := utils.ParseFlags()
-	log.InitLogger(opts.Debug)
-
-	args := flag.Args()
-	if len(args) != 1 {
-		slog.Error(
-			"invalid arguments",
-			"usage", "updater ${data-file-dir}",
-		)
-		os.Exit(2)
+func (a *App) UpdateCmd() *cobra.Command {
+	const usage = "update /path/to/data/files"
+	update := &cobra.Command{
+		Use:   usage,
+		Short: "Update repo data",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 1 {
+				slog.Error(
+					"invalid arguments",
+					"usage", "updater ${data-file-dir}",
+				)
+				return fmt.Errorf("invalid argument")
+			}
+			return update(a.Client, a.Ctx, args[0])
+		},
 	}
+	return update
+}
 
-	client, ctx := utils.InitClientAndContext(opts.Token)
-
-	dir := args[0]
+func update(client *api.Client, ctx context.Context, dir string) error {
 	list, err := io.GetDataFiles(dir)
 	if err != nil {
 		slog.Error(
@@ -37,7 +39,7 @@ func main() {
 			"dir", dir,
 			"err", err,
 		)
-		os.Exit(1)
+		return fmt.Errorf("failed to get data files at %s: %w", dir, err)
 	}
 
 	for _, path := range list {
@@ -46,21 +48,21 @@ func main() {
 			"path", path,
 		)
 
-		if err := update(client, ctx, path); err != nil {
+		if err := updateSingleFile(client, ctx, path); err != nil {
 			slog.Error(
 				"update file failed",
 				"path", path,
 				"err", err,
 			)
-			os.Exit(1)
+			return fmt.Errorf("update file %s failed: %w", path, err)
 		}
 	}
 
 	slog.Info("finished")
+	return nil
 }
 
-// Update a file/user.
-func update(client *api.Client, ctx context.Context, path string) error {
+func updateSingleFile(client *api.Client, ctx context.Context, path string) error {
 	const maxTagNumber = 5
 	owner := utils.ParseOwner(path)
 

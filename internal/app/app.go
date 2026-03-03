@@ -42,6 +42,7 @@ func (a *App) RootCmd() *cobra.Command {
 	rootCmd.PersistentFlags().StringVarP(&token, "token", "t", "", "GitHub token")
 	rootCmd.AddCommand(a.UniqueCmd())
 	rootCmd.AddCommand(a.CheckCmd())
+	rootCmd.AddCommand(a.UpdateCmd())
 
 	return rootCmd
 }
