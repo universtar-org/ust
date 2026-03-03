@@ -33,6 +33,8 @@ func (a *App) RootCmd() *cobra.Command {
 			log.InitLogger(debug)
 			return nil
 		},
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},
