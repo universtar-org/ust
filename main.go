@@ -1,7 +1,15 @@
 package main
 
-import "github.com/universtar-org/tools/cmd"
+import (
+	"os"
+
+	"github.com/universtar-org/tools/internal/app"
+)
 
 func main() {
-	cmd.Exec()
+	app := app.New("")
+
+	if err := app.RootCmd().Execute(); err != nil {
+		os.Exit(1)
+	}
 }
