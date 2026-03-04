@@ -1,4 +1,4 @@
-module github.com/universtar-org/tools
+module github.com/universtar-org/ust
 
 go 1.25.7
 

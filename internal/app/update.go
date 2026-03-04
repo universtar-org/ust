@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/spf13/cobra"
-	"github.com/universtar-org/tools/internal/api"
-	"github.com/universtar-org/tools/internal/io"
-	"github.com/universtar-org/tools/internal/utils"
+	"github.com/universtar-org/ust/internal/api"
+	"github.com/universtar-org/ust/internal/io"
+	"github.com/universtar-org/ust/internal/utils"
 )
 
 func (a *App) UpdateCmd() *cobra.Command {

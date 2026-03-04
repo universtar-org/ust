@@ -2,7 +2,7 @@ package io
 
 import (
 	"github.com/goccy/go-yaml"
-	"github.com/universtar-org/tools/internal/model"
+	"github.com/universtar-org/ust/internal/model"
 
 	"log/slog"
 	"os"

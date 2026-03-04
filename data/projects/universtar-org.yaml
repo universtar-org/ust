@@ -6,7 +6,7 @@
     - hugo
     - universtar
   updated_at: "2026-02-03T13:56:19Z"
-- repo: tools
+- repo: ust
   stars: 0
   description: A tool used to fetch and update project data for universtar.
   tags:

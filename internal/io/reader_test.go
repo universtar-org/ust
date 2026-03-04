@@ -1,9 +1,9 @@
 package io_test
 
 import (
-	"github.com/universtar-org/tools/internal/io"
-	"github.com/universtar-org/tools/internal/model"
-	"github.com/universtar-org/tools/internal/utils"
+	"github.com/universtar-org/ust/internal/io"
+	"github.com/universtar-org/ust/internal/model"
+	"github.com/universtar-org/ust/internal/utils"
 	"testing"
 )
 
@@ -31,7 +31,7 @@ func TestReadYaml(t *testing.T) {
 					UpdatedAt: "2026-02-03T13:56:19Z",
 				},
 				{
-					Repo:        "tools",
+					Repo:        "ust",
 					Stars:       0,
 					Description: "A tool used to fetch and update project data for universtar.",
 					Tags:        []string{"Go"},

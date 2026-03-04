@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
-	"github.com/universtar-org/tools/internal/api"
-	"github.com/universtar-org/tools/internal/log"
+	"github.com/universtar-org/ust/internal/api"
+	"github.com/universtar-org/ust/internal/log"
 )
 
 type App struct {

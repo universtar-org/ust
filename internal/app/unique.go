@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/universtar-org/tools/internal/api"
-	"github.com/universtar-org/tools/internal/model"
+	"github.com/universtar-org/ust/internal/api"
+	"github.com/universtar-org/ust/internal/model"
 )
 
 func (a *App) UniqueCmd() *cobra.Command {
@@ -82,7 +82,7 @@ func checkUsername(client *api.Client, ctx context.Context, username string) (*m
 }
 
 func checkUniqueness(client *api.Client, ctx context.Context, repos []model.Repo, user model.User, repoOwner string) error {
-	projectWhiteList := []string{"tools", "www"}
+	projectWhiteList := []string{"ust", "www"}
 
 	if user.Type != "User" {
 		return nil

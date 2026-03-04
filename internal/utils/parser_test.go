@@ -1,7 +1,7 @@
 package utils_test
 
 import (
-	"github.com/universtar-org/tools/internal/utils"
+	"github.com/universtar-org/ust/internal/utils"
 	"testing"
 )
 

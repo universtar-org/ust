@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/universtar-org/tools/internal/app"
+	"github.com/universtar-org/ust/internal/app"
 )
 
 func main() {

@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/universtar-org/tools/internal/model"
+	"github.com/universtar-org/ust/internal/model"
 )
 
 func (c *Client) GetUser(ctx context.Context, username string) (*model.User, error) {

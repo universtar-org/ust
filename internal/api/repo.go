@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/universtar-org/tools/internal/model"
+	"github.com/universtar-org/ust/internal/model"
 )
 
 // GetRepo Get repo information including description, number of stars, etc., via GitHub API.
